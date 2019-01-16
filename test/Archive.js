@@ -1,18 +1,22 @@
-const Archive = require('../module/Archive');
+const Archive = require('../modules/Archive');
 let archive = new Archive({
-    dir: 'eatbook',
+    dir: __dirname,
     url: 'https://eatbook.sg/popular-hawker-stalls/'
 });
 
+console.log(__dirname);
 
 archive.fetchFavicon().then(result => {
     console.log(result);
     return archive.fetchPDF();
-}).then(() => {
+}).then(result => {
+    console.log(result);
     return archive.fetchScreenshot();
-}).then(() => {
+}).then(result => {
+    console.log(result);
     return archive.fetchDom();
-}).then(() => {
+}).then(result => {
+    console.log(result);
     return archive.submitArchiveOrg();
 }).then(result => {
     console.log(result);

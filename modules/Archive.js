@@ -4,12 +4,14 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const request = require('request');
 
+const Utils = require('./Utils');
+
 class Archive {
     constructor({ dir, url, forceRedownload = true }) {
-        this.dirName = dir;
+        this.folderName = Utils.safeFolderRename(url);
         this.url = url;
         this.forceRedownload = forceRedownload;
-        this.mainDirectory = path.join(__dirname, this.dirName);
+        this.mainDirectory = path.join(dir, this.folderName);
         fs.ensureDirSync(this.mainDirectory);
     }
 
@@ -43,10 +45,10 @@ class Archive {
         console.debug(`[#] fetchPDF ${pdfPath}`);
         if (fs.pathExistsSync(pdfPath) && !this.forceRedownload) {
             console.debug(`[#] fetchPDF: File exist.`);
-            return resolve({
+            return {
                 output: 'output.pdf',
                 status: 'skipped'
-            });
+            };
         }
 
         const browser = await puppeteer.launch();
@@ -55,10 +57,10 @@ class Archive {
         await page.pdf({ path: pdfPath, format: 'A4' });
         console.debug(`[@] fetchPDF: Downloading ${pdfPath}`);
         await browser.close();
-        return resolve({
+        return {
             output: 'output.pdf',
             status: 'success'
-        });
+        };
     }
 
     async fetchScreenshot() {
@@ -66,10 +68,10 @@ class Archive {
         console.debug(`[#] fetchScreenshot ${screenPath}`);
         if (fs.pathExistsSync(screenPath) && !this.forceRedownload) {
             console.debug(`[#] fetchScreenshot: File exist.`);
-            return resolve({
+            return {
                 output: 'output.png',
                 status: 'skipped'
-            });
+            };
         }
 
         const browser = await puppeteer.launch();
@@ -78,10 +80,10 @@ class Archive {
         await page.screenshot({ path: screenPath, fullPage: true, omitBackground: true });
         console.debug(`[@] fetchScreenshot: Downloading ${screenPath}`);
         await browser.close();
-        return resolve({
+        return {
             output: 'output.png',
             status: 'success'
-        });
+        };
     }
 
     async fetchDom() {
@@ -89,10 +91,10 @@ class Archive {
         console.debug(`[#] fetchDom ${htmlPath}`);
         if (fs.pathExistsSync(htmlPath) && !this.forceRedownload) {
             console.debug(`[#] fetchDom: File exist.`);
-            return resolve({
+            return {
                 output: 'output.html',
                 status: 'skipped'
-            });
+            };
         }
 
         const browser = await puppeteer.launch();
@@ -102,10 +104,10 @@ class Archive {
         fs.writeFileSync(htmlPath, bodyHTML);
         console.debug(`[@] fetchDom: Downloading ${htmlPath}`);
         await browser.close();
-        return resolve({
+        return {
             output: 'output.html',
             status: 'success'
-        });
+        };
     }
 
     async submitArchiveOrg() {
