@@ -27,19 +27,16 @@ class Archive {
     async fetchFavicon() {
         return new Promise((resolve, reject) => {
             let iconPath = path.join(this.mainDirectory, 'favicon.ico');
-            console.debug(`[#] fetchFavicon: ${iconPath}`);
             if (fs.pathExistsSync(iconPath) && !this.forceRedownload) {
-                console.debug(`[#] fetchFavicon: File exist.`);
                 return resolve({
-                    output: 'favicon.ico',
+                    output: iconPath,
                     status: 'skipped'
                 });
             }
 
-            console.debug(`[@] fetchFavicon: Downloading ${iconPath}`);
             download(`https://www.google.com/s2/favicons?domain=${this.url}`).pipe(fs.createWriteStream(iconPath));
             return resolve({
-                output: 'favicon.ico',
+                output: iconPath,
                 status: 'success'
             });
         });
@@ -47,7 +44,6 @@ class Archive {
 
     async fetchWebpage() {
         let webPath = path.join(this.mainDirectory, 'full');
-        console.debug(`[#] fetchWebpage ${pdfPath}`);
         const options = {
             urls: [this.url],
             directory: webPath
@@ -58,11 +54,9 @@ class Archive {
 
     async fetchPDF() {
         let pdfPath = path.join(this.mainDirectory, 'output.pdf');
-        console.debug(`[#] fetchPDF ${pdfPath}`);
         if (fs.pathExistsSync(pdfPath) && !this.forceRedownload) {
-            console.debug(`[#] fetchPDF: File exist.`);
             return {
-                output: 'output.pdf',
+                output: pdfPath,
                 status: 'skipped'
             };
         }
@@ -72,22 +66,19 @@ class Archive {
         await page.goto(this.url, { waitUntil: 'networkidle2' });
         await page.pdf({ path: pdfPath, format: 'A4' });
         let title = await page.title();
-        console.debug(`[@] fetchPDF: Downloading ${pdfPath}`);
         await browser.close();
         return {
             title,
-            output: 'output.pdf',
+            output: pdfPath,
             status: 'success'
         };
     }
 
     async fetchScreenshot() {
         let screenPath = path.join(this.mainDirectory, 'output.png');
-        console.debug(`[#] fetchScreenshot ${screenPath}`);
         if (fs.pathExistsSync(screenPath) && !this.forceRedownload) {
-            console.debug(`[#] fetchScreenshot: File exist.`);
             return {
-                output: 'output.png',
+                output: screenPath,
                 status: 'skipped'
             };
         }
@@ -97,22 +88,19 @@ class Archive {
         await page.goto(this.url, { waitUntil: 'networkidle2' });
         await page.screenshot({ path: screenPath, fullPage: true, omitBackground: true });
         let title = await page.title();
-        console.debug(`[@] fetchScreenshot: Downloading ${screenPath}`);
         await browser.close();
         return {
             title,
-            output: 'output.png',
+            output: screenPath,
             status: 'success'
         };
     }
 
     async fetchDom() {
         let htmlPath = path.join(this.mainDirectory, 'output.html');
-        console.debug(`[#] fetchDom ${htmlPath}`);
         if (fs.pathExistsSync(htmlPath) && !this.forceRedownload) {
-            console.debug(`[#] fetchDom: File exist.`);
             return {
-                output: 'output.html',
+                output: htmlPath,
                 status: 'skipped'
             };
         }
@@ -123,11 +111,10 @@ class Archive {
         let bodyHTML = await page.content();
         let title = await page.title();
         fs.writeFileSync(htmlPath, bodyHTML);
-        console.debug(`[@] fetchDom: Downloading ${htmlPath}`);
         await browser.close();
         return {
             title,
-            output: 'output.html',
+            output: htmlPath,
             status: 'success'
         };
     }
@@ -136,7 +123,6 @@ class Archive {
         return new Promise((resolve, reject) => {
             let archiveFile = path.join(this.mainDirectory, 'archive.org.txt');
             if (fs.pathExistsSync(archiveFile) && !this.forceRedownload) {
-                console.debug(`[#] submitArchiveOrg: Already submitted.`);
                 return resolve({
                     output: fs.readFileSync(archiveFile),
                     status: 'skipped'
@@ -145,7 +131,6 @@ class Archive {
 
             let domain = `http://web.archive.org`;
             let url = `${domain}/save/${this.url}`;
-            console.debug(`[#] submitArchiveOrg: ${url}`);
             const options = {
                 url,
                 headers: {

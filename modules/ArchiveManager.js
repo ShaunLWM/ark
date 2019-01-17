@@ -42,37 +42,75 @@ class ArchiveManager {
             });
 
             if (this.fullFullWebpage) {
-                await archive.fetchWebpage();
+                console.debug(`[#] fullFullWebpage: intialising`);
+                let result = await archive.fetchWebpage();
+                console.log(`[@] fullFullWebpage: ${result.filename}`);
             }
 
             if (this.fetchFavicon) {
-                await archive.fetchFavicon();
+                console.debug(`[#] fetchFavicon: fetching favicon.ico.`);
+                let result = await archive.fetchFavicon();
+                if (result.status === 'skipped') {
+                    console.error(`[!] fetchFavicon: file exist.`);
+                } else {
+                    console.log(`[@] fetchFavicon: downloaded favicon.ico`);
+                }
             }
 
             if (this.fetchPDF) {
-                let res = await archive.fetchPDF();
+                console.debug(`[#] fetchPDF: converting to pdf..`);
+                let result = await archive.fetchPDF();
+                if (result === 'skipped') {
+                    console.debug(`[#] fetchPDF: file exist.`);
+                } else {
+                    console.log(`[@] fetchPDF: downloaded ${result.output}`);
+                }
+
                 this.info.title = res.title;
             }
 
             if (this.fetchScreenshot) {
-                let res = await archive.fetchScreenshot();
-                this.info.title = res.title;
+                console.debug(`[#] fetchScreenshot: converting to png..`);
+                let result = await archive.fetchScreenshot();
+                if (result === 'skipped') {
+                    console.debug(`[#] fetchScreenshot: file exist.`);
+                } else {
+                    console.log(`[@] fetchScreenshot: downloaded ${result.output}`);
+                }
+
+                this.info.title = result.title;
             }
 
             if (this.fetchDom) {
-                let res = await archive.fetchDom();
+                console.debug(`[#] fetchDom: fetching full html without external dependencies..`);
+                let result = await archive.fetchDom();
+                if (result === 'skipped') {
+                    console.debug(`[#] fetchDom: file exist.`);
+                } else {
+                    console.log(`[@] fetchDom: downloaded ${result.output}`);
+                }
+
                 this.info.title = res.title;
             }
 
             if (this.fetchArchiveOrg) {
-                await archive.submitArchiveOrg();
+                let result = await archive.submitArchiveOrg();
+                if (result.status === 'skipped') {
+                    console.debug(`[#] submitArchiveOrg: already submitted.`);
+                } else if (result.status === 'failed') {
+                    console.error(`[!] submitArchiveOrg: ${result.message}`);
+                } else {
+                    console.log(`[@] submitArchiveOrg: submitted ${result.archiveUrl}`);
+                }
             }
 
+            console.debug(`[#] ArchiveManager: done. writing to database..`);
             this.archivesDb.insert({
                 folder: archive.folderName,
                 lastUpdated: Math.round((new Date()).getTime()),
                 ...this.info
             }).write();
+            console.debug(`[#] ArchiveManager: done. exiting..`)
         } catch (error) {
             console.error(`[!] addUrl: ${error}`);
         }
