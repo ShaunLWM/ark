@@ -11,6 +11,7 @@
     "express-handlebars": "^3.0.0",
     "filenamify": "^2.1.0",
     "fs-extra": "^7.0.1",
+    "lodash-id": "^0.14.0",
     "lowdb": "^1.0.0",
     "puppeteer": "^1.11.0",
     "request": "^2.88.0"

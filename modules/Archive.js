@@ -8,11 +8,19 @@ const Utils = require('./Utils');
 
 class Archive {
     constructor({ dir, url, forceRedownload = true }) {
-        this.folderName = Utils.safeFolderRename(url);
+        this._folderName = Utils.safeFolderRename(url);
         this.url = url;
         this.forceRedownload = forceRedownload;
-        this.mainDirectory = path.join(dir, this.folderName);
+        this.mainDirectory = path.join(dir, this._folderName);
         fs.ensureDirSync(this.mainDirectory);
+    }
+
+    get folderName() {
+        return this._folderName;
+    }
+
+    set folderName(url) {
+        this._folderName = Utils.safeFolderRename(url);
     }
 
     async fetchFavicon() {

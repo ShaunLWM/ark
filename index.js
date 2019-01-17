@@ -1,5 +1,9 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
+
+const ArchiveManager = require('./modules/ArchiveManager');
+let archiveManager = new ArchiveManager({ mainDirectory: __dirname });
+
 const app = express();
 let hbs = exphbs.create({
     defaultLayout: 'main.hbs',
