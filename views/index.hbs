@@ -1,10 +1,15 @@
-<table>
+<table id="archives">
     {{#each archives}}
     <tr>
         <td>
             <img src={{this.favicon}} />
         </td>
-        <td><a href={{this.url}}>{{this.title}}</a></td>
+        <td>
+            {{this.title}}
+        </td>
+        <td>
+            <a href={{this.url}}>original</a>
+        </td>
         <td>
             <a href={{this.dom}}>html</a>
         </td>
