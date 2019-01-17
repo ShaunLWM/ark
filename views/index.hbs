@@ -7,12 +7,17 @@
 
     function setup() {
         let spinner = document.querySelector('#spinner');
+        let errorText = document.querySelector('#error');
+
         document.querySelector('#button_submit').addEventListener('click', function () {
+            spinner.style.display = 'none';
+            errorText.style.display = 'none';
             let url = document.querySelector('#input_url').value;
             let expression = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/g;
             let regex = new RegExp(expression);
             if (url.length < 1 || !url.match(regex)) {
-                return console.log('failed');
+                errorText.style.display = 'block';
+                return errorText.textContent = 'failed checks';
             }
 
             spinner.style.display = 'block';
@@ -23,12 +28,14 @@
                     return location.reload();
                 }
 
-                console.log(`status ${request.status}`);
+                errorText.style.display = 'block';
+                return errorText.textContent = `status ${request.status}`;
             };
 
             request.onerror = function (error) {
                 spinner.style.display = 'none';
-                console.log(`onerror ${error}`);
+                errorText.style.display = 'block';
+                return errorText.textContent = `status ${request.status}`;
             };
 
             request.send();
@@ -40,6 +47,7 @@
 <input type="text" name="input_url" id="input_url" />
 <button type="button" id="button_submit">Submit URL</button>
 <img src="/img/spinner.gif" id="spinner" style="width:50px;height:50px;display:none" />
+<span style="color:red" id="error"></span>
 <p></p>
 
 <table id="archives">
