@@ -4,6 +4,7 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const request = require('request');
 const scrape = require('website-scraper');
+const PuppeteerPlugin = require('website-scraper-puppeteer');
 
 const Utils = require('./Utils');
 
@@ -46,7 +47,8 @@ class Archive {
         let webPath = path.join(this.mainDirectory, 'full');
         const options = {
             urls: [this.url],
-            directory: webPath
+            directory: webPath,
+            plugins: [new PuppeteerPlugin()]
         };
 
         return scrape(options);
