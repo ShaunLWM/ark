@@ -3,6 +3,7 @@ const download = require('download');
 const path = require('path');
 const puppeteer = require('puppeteer');
 const request = require('request');
+const scrape = require('website-scraper');
 
 const Utils = require('./Utils');
 
@@ -44,8 +45,15 @@ class Archive {
         });
     }
 
-    fetchWebpage() {
+    async fetchWebpage() {
+        let webPath = path.join(this.mainDirectory, 'full');
+        console.debug(`[#] fetchWebpage ${pdfPath}`);
+        const options = {
+            urls: [this.url],
+            directory: webPath
+        };
 
+        return scrape(options);
     }
 
     async fetchPDF() {

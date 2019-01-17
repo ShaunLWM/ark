@@ -4,13 +4,15 @@ const lodashId = require('lodash-id');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 const Archive = require('./Archive');
+const Utils = require('./Utils');
 
 class ArchiveManager {
-    constructor({ mainDirectory = null, fetchFavicon = true, fetchDom = true, fetchScreenshot = true, fetchPDF = true, fetchArchiveOrg = true }) {
+    constructor({ mainDirectory = null, fullFullWebpage = true, fetchFavicon = true, fetchDom = true, fetchScreenshot = true, fetchPDF = true, fetchArchiveOrg = true }) {
         if (mainDirectory === null) {
             throw new Error('[!] options: mainDirectory not set.')
         }
 
+        this.fullFullWebpage = fullFullWebpage;
         this.fetchFavicon = fetchFavicon;
         this.fetchDom = fetchDom;
         this.fetchScreenshot = fetchScreenshot;
@@ -38,6 +40,10 @@ class ArchiveManager {
                 dir: this.dir,
                 url
             });
+
+            if (this.fullFullWebpage) {
+                await archive.fetchWebpage();
+            }
 
             if (this.fetchFavicon) {
                 await archive.fetchFavicon();
