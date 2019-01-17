@@ -33,8 +33,6 @@ class ArchiveManager {
 
     async addUrl(url) {
         this.info.url = url;
-
-
         try {
             let archive = new Archive({
                 dir: this.dir,
@@ -70,7 +68,7 @@ class ArchiveManager {
                 ...this.info
             }).write();
         } catch (error) {
-            console.error(`[!] ${error}`);
+            console.error(`[!] addUrl: ${error}`);
         }
     }
 }
