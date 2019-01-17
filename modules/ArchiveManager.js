@@ -43,8 +43,8 @@ class ArchiveManager {
 
             if (this.fullFullWebpage) {
                 console.debug(`[#] fetchFullWebpage: intialising`);
-                let result = await archive.fetchWebpage();
-                console.log(`[@] fullFullWebpage: ${result.filename}`);
+                await archive.fetchWebpage();
+                console.log(`[@] fullFullWebpage: done`);
             }
 
             if (this.fetchFavicon) {
