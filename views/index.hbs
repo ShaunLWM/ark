@@ -1,2 +1,18 @@
-Hello!
-{{foo}}
+<table>
+    {{#each archives}}
+    <tr>
+        <td>
+            <img src={{this.favicon}} />
+        </td>
+        <td>
+            <a href={{this.dom}}>html</a>
+        </td>
+        <td>
+            <a href={{this.pdf}}>pdf</a>
+        </td>
+        <td>
+            <a href={{this.screenshot}}>screenshot</a>
+        </td>
+    </tr>
+    {{/each}}
+</table>
