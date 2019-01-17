@@ -28,7 +28,7 @@ class ArchiveManager {
     }
 
     getArchives() {
-        return this.archivesDb.sortBy('lastUpdated').value().filter(val => {
+        return this.archivesDb.orderBy('lastUpdated', ['desc']).value().filter(val => {
             return fs.pathExistsSync(path.join(this.dir, val['folder']));
         });
     }
