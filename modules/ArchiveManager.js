@@ -1,7 +1,8 @@
+const fs = require('fs-extra');
+const path = require('path');
 const lodashId = require('lodash-id');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
-
 const Archive = require('./Archive');
 
 class ArchiveManager {
@@ -15,6 +16,12 @@ class ArchiveManager {
         this.db = low(this.adapter);
         this.db._.mixin(lodashId);
         this.archivesDb = this.db.defaults({ archives: [] }).get('archives');
+    }
+
+    getArchives() {
+        return this.archivesDb.sortBy('lastUpdated').value().filter(val => {
+            return fs.pathExistsSync(path.join(this.dir, val['title']));
+        });
     }
 
     addUrl(url) {
