@@ -6,10 +6,16 @@ const FileSync = require('lowdb/adapters/FileSync');
 const Archive = require('./Archive');
 
 class ArchiveManager {
-    constructor({ mainDirectory = null }) {
+    constructor({ mainDirectory = null, fetchFavicon = true, fetchDom = true, fetchScreenshot = true, fetchPDF = true, fetchArchiveOrg = true }) {
         if (mainDirectory === null) {
             throw new Error('[!] options: mainDirectory not set.')
         }
+
+        this.fetchFavicon = fetchFavicon;
+        this.fetchDom = fetchDom;
+        this.fetchScreenshot = fetchScreenshot;
+        this.fetchPDF = fetchPDF;
+        this.fetchArchiveOrg = fetchArchiveOrg;
 
         this.dir = mainDirectory;
         this.adapter = new FileSync('db.json');
@@ -25,37 +31,47 @@ class ArchiveManager {
         });
     }
 
-    addUrl(url) {
+    async addUrl(url) {
         this.info.url = url;
-        let archive = new Archive({
-            dir: this.dir,
-            url
-        });
 
-        archive.fetchFavicon().then(result => {
-            console.log(result);
-            return archive.fetchPDF();
-        }).then(result => {
-            console.log(result);
-            return archive.fetchScreenshot();
-        }).then(result => {
-            console.log(result);
-            return archive.fetchDom();
-        })
-            // .then(result => {
-            //     console.log(result);
-            //     // return archive.submitArchiveOrg();
-            //     return true;
-            // })
-            .then(result => {
-                console.log(result);
-                this.archivesDb.insert({
-                    title: archive.folderName,
-                    lastUpdated: Math.round((new Date()).getTime() / 1000)
-                }).write();
-            }).catch(error => {
-                console.log(error);
+
+        try {
+            let archive = new Archive({
+                dir: this.dir,
+                url
             });
+
+            if (this.fetchFavicon) {
+                await archive.fetchFavicon();
+            }
+
+            if (this.fetchPDF) {
+                let res = await archive.fetchPDF();
+                this.info.title = res.title;
+            }
+
+            if (this.fetchScreenshot) {
+                let res = await archive.fetchScreenshot();
+                this.info.title = res.title;
+            }
+
+            if (this.fetchDom) {
+                let res = await archive.fetchDom();
+                this.info.title = res.title;
+            }
+
+            if (this.fetchArchiveOrg) {
+                await archive.submitArchiveOrg();
+            }
+
+            this.archivesDb.insert({
+                folder: archive.folderName,
+                lastUpdated: Math.round((new Date()).getTime() / 1000),
+                ...this.info
+            }).write();
+        } catch (error) {
+            console.error(`[!] ${error}`);
+        }
     }
 }
 
