@@ -1916,6 +1916,13 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
+website-scraper-puppeteer@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/website-scraper-puppeteer/-/website-scraper-puppeteer-0.1.1.tgz#48511636a38ad9da33535bc4528d5585ad8f320f"
+  integrity sha512-1whzBuqvdNfket6ejPP/0NdT22ntxeJdSOjNqagdFTPCtT8HnhZ/s8aNcrrq17sKYvUr7nwKNbh59bP6Rohimg==
+  dependencies:
+    puppeteer "^1.11.0"
+
 website-scraper@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/website-scraper/-/website-scraper-4.0.0.tgz#eda0f8e2254ca4c0188b0f6b117e5a3a3c78675c"

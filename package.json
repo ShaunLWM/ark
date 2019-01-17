@@ -16,6 +16,7 @@
     "puppeteer": "^1.11.0",
     "request": "^2.88.0",
     "timeago.js": "^4.0.0-beta.2",
-    "website-scraper": "^4.0.0"
+    "website-scraper": "^4.0.0",
+    "website-scraper-puppeteer": "^0.1.1"
   }
 }

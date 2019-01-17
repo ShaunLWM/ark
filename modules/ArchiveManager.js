@@ -42,7 +42,7 @@ class ArchiveManager {
             });
 
             if (this.fullFullWebpage) {
-                console.debug(`[#] fullFullWebpage: intialising`);
+                console.debug(`[#] fetchFullWebpage: intialising`);
                 let result = await archive.fetchWebpage();
                 console.log(`[@] fullFullWebpage: ${result.filename}`);
             }
@@ -66,7 +66,7 @@ class ArchiveManager {
                     console.log(`[@] fetchPDF: downloaded ${result.output}`);
                 }
 
-                this.info.title = res.title;
+                this.info.title = result.title;
             }
 
             if (this.fetchScreenshot) {
@@ -90,7 +90,7 @@ class ArchiveManager {
                     console.log(`[@] fetchDom: downloaded ${result.output}`);
                 }
 
-                this.info.title = res.title;
+                this.info.title = result.title;
             }
 
             if (this.fetchArchiveOrg) {
