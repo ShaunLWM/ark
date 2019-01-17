@@ -110,7 +110,10 @@ class ArchiveManager {
                 lastUpdated: Math.round((new Date()).getTime()),
                 ...this.info
             }).write();
-            console.debug(`[#] ArchiveManager: done. exiting..`)
+            console.debug(`[#] ArchiveManager: done. exiting..`);
+            return {
+                status: 'success'
+            };
         } catch (error) {
             console.error(`[!] addUrl: ${error}`);
         }

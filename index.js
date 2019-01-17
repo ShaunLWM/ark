@@ -40,4 +40,31 @@ app.get('/', (req, res) => {
         })
     });
 });
+
+app.get('/s', async (req, res) => {
+    if (typeof req.query.url === 'undefined') {
+        return res.status(404).json({
+            status: 'failed',
+            message: 'no parameter'
+        })
+    }
+
+    let url = req.query.url;
+    let expression = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/g;
+    let regex = new RegExp(expression);
+    if (url.length < 1 || !url.match(regex)) {
+        return res.status(404).json({
+            status: 'failed',
+            message: 'failed check'
+        })
+    }
+
+    try {
+        let result = await archiveManager.addUrl(url);
+        return res.status(200).send(result);
+    } catch (error) {
+        return res.status(404).send(error);
+    }
+});
+
 app.listen(port, () => console.log(`[@] ark running on ${port}!`))
