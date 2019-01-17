@@ -63,9 +63,11 @@ class Archive {
         const page = await browser.newPage();
         await page.goto(this.url, { waitUntil: 'networkidle2' });
         await page.pdf({ path: pdfPath, format: 'A4' });
+        let title = await page.title();
         console.debug(`[@] fetchPDF: Downloading ${pdfPath}`);
         await browser.close();
         return {
+            title,
             output: 'output.pdf',
             status: 'success'
         };
@@ -86,9 +88,11 @@ class Archive {
         const page = await browser.newPage();
         await page.goto(this.url, { waitUntil: 'networkidle2' });
         await page.screenshot({ path: screenPath, fullPage: true, omitBackground: true });
+        let title = await page.title();
         console.debug(`[@] fetchScreenshot: Downloading ${screenPath}`);
         await browser.close();
         return {
+            title,
             output: 'output.png',
             status: 'success'
         };
@@ -109,10 +113,12 @@ class Archive {
         const page = await browser.newPage();
         await page.goto(this.url, { waitUntil: 'networkidle2' });
         let bodyHTML = await page.content();
+        let title = await page.title();
         fs.writeFileSync(htmlPath, bodyHTML);
         console.debug(`[@] fetchDom: Downloading ${htmlPath}`);
         await browser.close();
         return {
+            title,
             output: 'output.html',
             status: 'success'
         };

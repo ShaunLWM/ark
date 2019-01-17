@@ -16,6 +16,7 @@ class ArchiveManager {
         this.db = low(this.adapter);
         this.db._.mixin(lodashId);
         this.archivesDb = this.db.defaults({ archives: [] }).get('archives');
+        this.info = {};
     }
 
     getArchives() {
@@ -25,6 +26,7 @@ class ArchiveManager {
     }
 
     addUrl(url) {
+        this.info.url = url;
         let archive = new Archive({
             dir: this.dir,
             url
