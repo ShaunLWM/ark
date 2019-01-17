@@ -6,6 +6,7 @@
     }
 
     function setup() {
+        let spinner = document.querySelector('#spinner');
         document.querySelector('#button_submit').addEventListener('click', function () {
             let url = document.querySelector('#input_url').value;
             let expression = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/g;
@@ -14,6 +15,7 @@
                 return console.log('failed');
             }
 
+            spinner.style.display = 'block';
             let request = new XMLHttpRequest();
             request.open('GET', `/s?url=${url}`, true);
             request.onload = function () {
@@ -25,6 +27,7 @@
             };
 
             request.onerror = function (error) {
+                spinner.style.display = 'none';
                 console.log(`onerror ${error}`);
             };
 
@@ -36,6 +39,7 @@
 </script>
 <input type="text" name="input_url" id="input_url" />
 <button type="button" id="button_submit">Submit URL</button>
+<img src="/img/spinner.gif" id="spinner" style="width:50px;height:50px;display:none" />
 <p></p>
 
 <table id="archives">
