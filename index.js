@@ -2,6 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const fs = require('fs-extra');
+const { format } = require('timeago.js');
 
 const ArchiveManager = require('./modules/ArchiveManager');
 let archivesDirectory = 'archives';
@@ -12,8 +13,7 @@ const app = express();
 let hbs = exphbs.create({
     defaultLayout: 'main.hbs',
     helpers: {
-        foo: function () { return 'FOO!'; },
-        bar: function () { return 'BAR!'; }
+        timeago: function (time) { return format(time, 'en_US'); }
     }
 });
 
@@ -27,8 +27,9 @@ app.use('/archives', express.static(archivesDirectory));
 app.get('/', (req, res) => {
     return res.render('index.hbs', {
         archives: archiveManager.getArchives().map(archive => {
-            let dir = path.join(archivesDirectory, archive.title);
+            let dir = path.join(archivesDirectory, archive.folder);
             return {
+                archiveorg: (fs.pathExistsSync(path.join(dir, 'archive.org.txt')) ? fs.readFileSync(path.join(dir, 'archive.org.txt')) : ''),
                 favicon: (fs.pathExistsSync(path.join(dir, 'favicon.ico')) ? path.join(dir, 'favicon.ico') : ''),
                 dom: (fs.pathExistsSync(path.join(dir, 'output.html')) ? path.join(dir, 'output.html') : ''),
                 pdf: (fs.pathExistsSync(path.join(dir, 'output.pdf')) ? path.join(dir, 'output.pdf') : ''),

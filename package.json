@@ -14,6 +14,7 @@
     "lodash-id": "^0.14.0",
     "lowdb": "^1.0.0",
     "puppeteer": "^1.11.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "timeago.js": "^4.0.0-beta.2"
   }
 }

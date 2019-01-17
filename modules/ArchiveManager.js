@@ -27,7 +27,7 @@ class ArchiveManager {
 
     getArchives() {
         return this.archivesDb.sortBy('lastUpdated').value().filter(val => {
-            return fs.pathExistsSync(path.join(this.dir, val['title']));
+            return fs.pathExistsSync(path.join(this.dir, val['folder']));
         });
     }
 
@@ -66,7 +66,7 @@ class ArchiveManager {
 
             this.archivesDb.insert({
                 folder: archive.folderName,
-                lastUpdated: Math.round((new Date()).getTime() / 1000),
+                lastUpdated: Math.round((new Date()).getTime()),
                 ...this.info
             }).write();
         } catch (error) {

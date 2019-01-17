@@ -4,6 +4,7 @@
         <td>
             <img src={{this.favicon}} />
         </td>
+        <td><a href={{this.url}}>{{this.title}}</a></td>
         <td>
             <a href={{this.dom}}>html</a>
         </td>
@@ -13,6 +14,11 @@
         <td>
             <a href={{this.screenshot}}>screenshot</a>
         </td>
+        </td>
+        <td>
+            <a href={{this.archiveorg}}>archive.org</a>
+        </td>
+        <td>{{timeago this.lastUpdated}}</td>
     </tr>
     {{/each}}
 </table>
