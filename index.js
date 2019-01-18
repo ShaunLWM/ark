@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
         archives: archiveManager.getArchives().map(archive => {
             let dir = path.join(archivesDirectory, archive.folder);
             return {
-                full: (fs.pathExistsSync(path.join(dir, 'full', 'index.html')) ? fs.pathExistsSync(path.join(dir, 'full', 'index.html')) : ''),
+                full: (fs.pathExistsSync(path.join(dir, 'full', 'index.html')) ? path.join(dir, 'full', 'index.html') : ''),
                 archiveorg: (fs.pathExistsSync(path.join(dir, 'archive.org.txt')) ? fs.readFileSync(path.join(dir, 'archive.org.txt')) : ''),
                 favicon: (fs.pathExistsSync(path.join(dir, 'favicon.ico')) ? path.join(dir, 'favicon.ico') : ''),
                 dom: (fs.pathExistsSync(path.join(dir, 'output.html')) ? path.join(dir, 'output.html') : ''),
