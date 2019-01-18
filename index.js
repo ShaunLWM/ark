@@ -71,15 +71,17 @@ app.get('/s', async (req, res) => {
 app.get('/d/:id', function (req, res) {
     let archive = archiveManager.getArchivePath(req.params.id);
     if (typeof archive === 'undefined') {
+        console.error(`[!] download error: id not found ${req.params.id}`);
         return res.status(404).send('not found');
     }
 
+    console.error(`[@] sending archive zip for ${req.params.id}`);
     res.writeHead(200, {
         'Content-Type': 'application/zip',
         'Content-disposition': `attachment; filename=${archive.folder}.zip`
     });
 
-    var zip = Archiver('zip');
+    let zip = Archiver('zip');
     zip.pipe(res);
     return zip.directory(path.join(__dirname, archivesDirectory, archive.folder, 'full'), false).finalize();
 });
