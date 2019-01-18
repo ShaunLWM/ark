@@ -3,6 +3,7 @@ const exphbs = require('express-handlebars');
 const path = require('path');
 const fs = require('fs-extra');
 const { format } = require('timeago.js');
+const Archiver = require('archiver');
 
 const ArchiveManager = require('./modules/ArchiveManager');
 let archivesDirectory = 'archives';
@@ -65,6 +66,22 @@ app.get('/s', async (req, res) => {
     } catch (error) {
         return res.status(404).send(error);
     }
+});
+
+app.get('/d/:id', function (req, res) {
+    let archive = archiveManager.getArchivePath(req.params.id);
+    if (typeof archive === 'undefined') {
+        return res.status(404).send('not found');
+    }
+
+    res.writeHead(200, {
+        'Content-Type': 'application/zip',
+        'Content-disposition': `attachment; filename=${archive.folder}.zip`
+    });
+
+    var zip = Archiver('zip');
+    zip.pipe(res);
+    return zip.directory(path.join(__dirname, archivesDirectory, archive.folder, 'full'), false).finalize();
 });
 
 app.listen(port, () => console.log(`[@] ark running on ${port}!`))
