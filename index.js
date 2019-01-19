@@ -5,8 +5,9 @@ const fs = require('fs-extra');
 const { format } = require('timeago.js');
 const Archiver = require('archiver');
 
+const config = require('./config');
 const ArchiveManager = require('./modules/ArchiveManager');
-let archivesDirectory = 'archives';
+let archivesDirectory = config.archiveDirectoryName;
 let mainDirectory = path.join(__dirname, archivesDirectory);
 let archiveManager = new ArchiveManager({ mainDirectory });
 
@@ -20,7 +21,6 @@ let hbs = exphbs.create({
 
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
-const port = 8081;
 
 fs.ensureDirSync(archivesDirectory);
 app.use(express.static('public'));
@@ -86,4 +86,4 @@ app.get('/d/:id', function (req, res) {
     return zip.directory(path.join(__dirname, archivesDirectory, archive.folder, 'full'), false).finalize();
 });
 
-app.listen(port, () => console.log(`[@] ark running on ${port}!`))
+app.listen(config.serverPort, () => console.log(`[@] ark running on ${port}!`))
