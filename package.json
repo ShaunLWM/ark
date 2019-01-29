@@ -5,6 +5,9 @@
   "repository": "https://github.com/ShaunLWM/ark.git",
   "author": "ShaunLWM",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "archiver": "^3.0.0",
     "download": "^7.1.0",
