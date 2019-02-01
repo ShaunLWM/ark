@@ -86,4 +86,4 @@ app.get('/d/:id', function (req, res) {
     return zip.directory(path.join(__dirname, archivesDirectory, archive.folder, 'full'), false).finalize();
 });
 
-app.listen(config.serverPort, () => console.log(`[@] ark running on ${port}!`))
+app.listen(config.serverPort, () => console.log(`[@] ark running on ${config.serverPort}!`))
