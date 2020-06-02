@@ -1,4 +1,4 @@
 module.exports = {
-    serverPort: 8081,
-    archiveDirectoryName: 'archives',
-}
+	serverPort: 8081,
+	archiveDirectoryName: "archives",
+};
