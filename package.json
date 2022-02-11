@@ -9,7 +9,7 @@
 		"archiver": "^4.0.1",
 		"download": "^8.0.0",
 		"express": "^4.17.1",
-		"express-handlebars": "^4.0.4",
+		"express-handlebars": "^5.3.1",
 		"filenamify": "^4.1.0",
 		"fs-extra": "^9.0.0",
 		"lodash-id": "^0.14.0",
